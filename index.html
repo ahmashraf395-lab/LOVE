@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع المفاجآت والهدايا الاحترافي ❤️</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #fff0f3; 
+            background-image: radial-gradient(#ffccd5 20%, transparent 20%), radial-gradient(#ffccd5 20%, transparent 20%);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            text-align: center; 
+            margin: 0; 
+            padding: 20px; 
+            color: #4a0e17; 
+        }
+        .box { 
+            background: rgba(255, 255, 255, 0.95); 
+            max-width: 450px; 
+            margin: 30px auto; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.2); 
+            border: 3px solid #ffb3c1;
+            position: relative;
+        }
+        .box::before { content: "🌸"; position: absolute; top: -15px; left: -15px; font-size: 30px; }
+        .box::after { content: "🌹"; position: absolute; bottom: -15px; right: -15px; font-size: 30px; }
+        
+        h1 { color: #ff4d6d; font-size: 26px; margin-bottom: 20px; }
+        .rose-title { font-size: 28px; color: #ff4d6d; font-weight: bold; }
+        
+        /* استايل العداد التنازلي */
+        .countdown-container {
+            background: #ffe6eb;
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px dashed #ff4d6d;
+        }
+        .countdown-title { font-size: 14px; color: #c71585; margin-bottom: 5px; font-weight: bold; }
+        #timer { font-size: 20px; font-weight: bold; color: #ff4d6d; letter-spacing: 1px; }
+
+        input[type="password"] { 
+            width: 80%; 
+            padding: 12px; 
+            margin: 15px 0; 
+            border: 2px solid #ffb3c1; 
+            border-radius: 10px; 
+            text-align: center; 
+            font-size: 18px; 
+            outline: none;
+        }
+        input[type="password"]:focus { border-color: #ff4d6d; box-shadow: 0 0 5px rgba(255, 77, 109, 0.5); }
+        
+        button { 
+            background-color: #ff4d6d; 
+            color: white; 
+            border: none; 
+            padding: 12px 35px; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-size: 18px; 
+            font-weight: bold; 
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3);
+        }
+        button:hover { background-color: #c71585; transform: scale(1.05); }
+        #content { display: none; }
+        
+        .photo-album { margin: 20px 0; }
+        .photo-album img { width: 100%; max-width: 350px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.15); border: 2px solid #fff; }
+        
+        /* استايل تأثير الكتابة */
+        .message { font-size: 20px; line-height: 1.8; margin-top: 20px; font-weight: 500; border-top: 2px dashed #ffb3c1; padding-top: 15px; min-height: 50px; color: #c71585; }
+    </style>
+</head>
+<body>
+
+    <!-- صفحة الباسوورد بالعداد التنازلي -->
+    <div id="login-box" class="box">
+        <!-- العداد التنازلي المضاف -->
+        <div class="countdown-container">
+            <div class="countdown-title">⏳ الوقت المتبقي على المفاجأة الكبرى:</div>
+            <div id="timer">جاري التحميل...</div>
+        </div>
+
+        <div class="rose-title">🌹 بموت فيكي يا ملكتي 🌹</div>
+        <p style="font-size: 18px; margin-top: 15px;">اكتبي الباسورد:</p>
+        <input type="password" id="password" placeholder="اكتبي الباسوورد التجريبي (1234)">
+        <br>
+        <button onclick="checkPassword()">NEXT ❤️</button>
+        <p id="error" style="color: red; display: none; margin-top: 15px; font-weight: bold;">الباسوورد غلط يا ملكتي! فكري تاني 😉🌸</p>
+    </div>
+
+    <!-- صفحة المفاجأة بتأثير الكتابة الحية -->
+    <div id="content" class="box">
+        <h1>كل سنة وأنتِ طيبة وبخير يا كل دنيتي! 🌹</h1>
+        
+        <audio id="bg-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" controls loop style="margin-top: 20px; width: 100%;"></audio>
+
+        <div class="photo-album">
+            <p style="color: #c71585; font-weight: bold; margin-bottom: 10px;">👇 ألبوم الصور الاحترافي المخصص 👇</p>
+            <img src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=500" alt="نموذج صورة 1">
+            <img src="https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=500" alt="نموذج صورة 2">
+        </div>
+
+        <!-- مكان كتابة الرسالة المتحركة -->
+        <div class="message" id="typewriter-text"></div>
+    </div>
+
+    <script>
+        // 1. كود تشغيل العداد التنازلي (مثال لوقت مستقبلي)
+        // يمكنك تغيير التاريخ من هنا بسهولة ليناسب العميل
+        var countdownDate = new Date("Dec 31, 2026 00:00:00").getTime();
+
+        var x = setInterval(function() {
+            var now = new Date().getTime();
+            var distance = countdownDate - now;
+
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("timer").innerHTML = days + " يوم " + hours + " ساعة " + minutes + " دقيقة " + seconds + " ثانية ";
+
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("timer").innerHTML = "❤️ حان وقت المفاجأة ❤️";
+            }
+        }, 1000);
+
+        // 2. نص الرسالة المتحركة وتأثير الكتابة
+        var textToType = "هنا بكتبلك الرسالة الخاصة والمميزة اللي حابب تبعتها لست البنات بكل التفاصيل والرموز اللي تحبها.. الكلمات بتظهر حرف حرف بشكل رائع يبهرها! 🥰❤️✨";
+        var index = 0;
+
+        function typeWriter() {
+            if (index < textToType.length) {
+                document.getElementById("typewriter-text").innerHTML += textToType.charAt(index);
+                index++;
+                setTimeout(typeWriter, 80); // سرعة الكتابة (80 مللي ثانية بين كل حرف)
+            }
+        }
+
+        // 3. التحقق من الباسوورد
+        function checkPassword() {
+            var pass = document.getElementById("password").value;
+            if(pass === "1234") {
+                document.getElementById("login-box").style.display = "none";
+                document.getElementById("content").style.display = "block";
+                document.getElementById("bg-music").play();
+                
+                // تشغيل تأثير الكتابة فور الدخول للموقع
+                typeWriter();
+            } else {
+                document.getElementById("error").style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>
